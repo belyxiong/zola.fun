@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)https://millionairemakers.io/ -->
+<body>
+<html>
+</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#5F1465">
+	<!-- generics -->
+	<!-- Windows 8.1 + IE11 and above -->
+	<meta name="msapplication-config" content="favicon/browserconfig.xml">
+	<link rel="stylesheet" href="css/index.css" type="text/css">
+	<link rel="stylesheet" href="css/jquery.countdown.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+	<title>Zola.fun - BlockChain Lottery Game Platform</title>
+	  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+  <script type="text/javascript" src="./abi/abi_zgt.js"></script>
+  <script type="text/javascript" src="./abi/abi_zst.js"></script>
+  <script type="text/javascript" src="./abi/abi_worldcup.js"></script>
+	<script type="text/javascript" src="./abi/abi_zolax.js"></script>
+	<script type="text/javascript" src="./js/web3.min.js"></script>
+	<script type="text/javascript" src="./js/gamelist.js"></script>
+	<script type="text/javascript" src="./js/contractmanager.js"></script>
+	<script type="text/javascript" src="./js/phphelper.js"></script>	
+<script type="text/javascript" src="./js/initAndLoadBalance.js"></script>
+	
+	<script>
+var Web3 = require('web3');
+var web3 ;//= new Web3();
+
+var curaddress;
+
+window.addEventListener('load', function() {
+//		init();
+});
+
+var MyBets;
+
+
+	</script>
+	</head>
+<body  style=" background-repeat:no-repeat ;background-size:100% 100%; background-attachment:fixed;">
+	<!-- <div id="particles-js"><canvas class="particles-js-canvas-el" style="width: 100%; height: 100%;" width="1093" height="925"></canvas></div> -->
+	<div class="bg-primary py-4" >
+		<div class="container">
+			<div class="row">
+				<div class="col-4">
+					<div class="row">
+                            <div class="col-1 align-self-center"><a href="http://www.zola.fun/"><img src="wp-content/themes/amchart/images/logos/logo.png" id="logoimg"></a></div>
+                            <div class="col-1 thin align-self-center" id="logo">
+
+                            </div>
+                        </div>
+				</div>
+				<div class="col-8 text-right thin align-self-left" id="balances"><b>Your address:</b><br>ETH Balance:<br>ZST Balance:<br>ZGT Balance:<br>ZGT Won:<br>ZGT Dividend:</div>
+			</div>
+		</div>
+	</div>
+	<nav class="navbar navbar-expand-md navbar-light bg-secondary p-0">
+		<div class="container" >
+			<button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span></button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="nav navbar-nav mr-auto">
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="index.html">Home</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="staytoend.html">Stay To Last</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="zstsale.html">Buy ZST</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="buysalezgt.html">Buy/Sale ZGT</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</nav>
+<br><br><br>
+<H1 align="center">
+ZOLA.FUN   -  A BlockChain Based Lottery Game Platform
+</H1>
+
+ <section class="white-text  section-padding" >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 wow fadeInUp">
+ 
+			<br>
+<h2 class="exo-bold red-text" style="color:#ff0000;">What is it?</h2><br>
+<p style="color:#333;">ZOLA.FUN is a decentralized lottery game platform based on Ethereum, player uses ZOLA Game Token(ZGT) to make the bet, winner will get ZGT as prize, ZGT can be exchanged between ETH under a fixed rate on our platform. Different type of games has different rules, please see different game page.<br><br>
+To take part in the games, player will need to get ZGT first, the offical way to get ZGT is exchange using ETH on our platform, we will keep a exchange platform where player can buy and sale the ZOLA game token, the exchange rate will be fixed for ever (1ETH=10000ZGT), see details <a href="buysalezgt.html" style="color:#00ff">here</a> </p>
+<br><br>
+                </div>
+            </div>
+        </div>
+    </section>
+	
+	
+	
+<section id="introduction" class="section-padding">
+        <div class="container">
+
+
+<h2 style="color:#ff0000;">Game Type</h2><br>
+<p style="color:#333;">
+Currently we have <a href="staytoend.html" style="color:#00ff">Stay To Last</a>game, please click them for details, at the same time we are continue developing more and more fun games, if you have any suggestions you can let us know, any information is welcome. 
+</p>
+<br>
+<h2 style="color:#ff0000;">Token Distribution</h2><br>
+<p style="color:#333;">
+For each round of game, we will hold part of(<strong style="color:#ff0000;">20%</strong>) all bet ZGT as the profit, the rest <strong style="color:#ff0000;">80%</strong> will be sent back to the lottery pool to distributed to the winner or move to next round game.</p><br><br>
+
+<div class="row">
+                <div class="col-md-5 content-padding wow bounceIn" >
+                    <div class="chart"></div>
+                </div>
+                <div class="col-md-7 wow bounceIn distributed-box" data-wow-delay=".5s">
+                    <div id="tooltip">
+
+                        <p style="color:#333;"><span id="value">80% - Sale to public</span>
+                        </p>
+                    </div>
+                </div>
+       </div>
+<br>
+</p>
+<h2 style="color:#ff0000;">Get dividends</h2><br>
+<p style="color:#333;">
+We distribute the profit to our share token(ZST : Zola Share Token) holders after each round of game, the detail distribute works like this:<br><br>
+Our team will always get <strong style="color:#ff0000;">15%</strong> of total profit.<br><br>
+The rest profit<strong style="color:#ff0000;">&nbsp;85%&nbsp;</strong> will be distributed to all ZST holders, distribution is based on the amount of ZST hold.<br><br>
+
+<br>
+</p>
+<div class="row">
+                <div class="col-md-5 content-padding wow bounceIn" >
+                    <div class="chartfunds"></div>
+                </div>
+                <div class="col-md-7 wow bounceIn platform-box" data-wow-delay=".5s"
+                     style="border:2px solid #e83e3f; padding:20px;">
+                    <div id="tooltip3">
+
+                        <p style="color:#333;"> <span id="value">40% - Platform development</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+<br>
+<h2 style="color:#ff0000;">Get ZST</h2><br>
+<p style="color:#333;">
+The total ZST supply will be 500,000,000 (500 million), the profit distribution will be based on the amount of sold ZST and the amount of each holder.<br><br>
+To see ZST sale progress and buy ZST, please see <a href="zstsale.html" style="color:#0000ff;">here</a>.
+<br>
+</p>
+
+<br><br>
+<h2 style="color:#ff0000;">Cross the chain</h2><br>
+<p style="color:#333;">
+Last but not the last, ZOLA Game Token(ZGT) is a cross chain token, it will be available on most popular blockchain networks like Ethereum, NEO, EOS etc, player can transfer ZGT between supported networks, Dapp developers on supported networks can accept ZGT as token in their Dapps to make the app more attractive and more fun, for more information stay tune.
+</p>
+                </div>
+            </div>
+        </div>
+    </section>
+	
+	
+	
+<script type="text/javascript" src="js/vendor/jquery.js"></script>
+<script type="text/javascript" src="js/vendor/bootstrap4.js"></script>
+<script type='text/javascript' src='ajax/libs/d3/3.5.5/d3.mina4e6.js?ver=1.11.0'></script>
+<script type='text/javascript' src='wp-content/themes/amchart/js/owl-carousel/owl.carousel.mina4e6.js?ver=1.11.0'></script>
+<script type='text/javascript' src='wp-content/themes/amchart/js/wow/wow.mina4e6.js?ver=1.11.0'></script>
+<script type='text/javascript' src='wp-content/themes/amchart/js/fuelfxa4e6.js?ver=1.11.0'></script>
+
+</body>
+
+<br><br>
+<br><br>
+<nav class="navbar navbar-expand-md navbar-light bg-secondary p-0">
+		<div class="container" >
+			<button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span></button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="nav navbar-nav mr-auto">
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="">Follow us : </a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="https://twitter.com/Zola_fun">TWitter</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="https://twitter.com/Zola_fun">Facebook</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="https://bitcointalk.org/index.php?topic=2889161.0">BitCoin Talk</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</nav>
+	
+
+<br><br>
+<br><br>
+</html>

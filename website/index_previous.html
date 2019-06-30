@@ -1,0 +1,506 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="">
+<!--<![endif]-->
+
+
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	
+    <title>ZOLA - World wide Charity lottery game</title>
+
+
+<link rel='stylesheet' id='contact-form-7-css'  href='wp-content/plugins/contact-form-7/includes/css/styles5859.css?ver=4.9.1' type='text/css' media='all' />
+<link rel='stylesheet' id='megamenu-css'  href='wp-content/uploads/maxmegamenu/style0b55.css?ver=cfb26c' type='text/css' media='all' />
+<link rel='stylesheet' id='dashicons-css'  href='wp-includes/css/dashicons.min5859.css?ver=4.9.1' type='text/css' media='all' />
+<link rel='stylesheet' id='megamenu-google-fonts-css'  href='http://fonts.googleapis.com/css?family=Open+Sans%3A400%2C700&amp;ver=4.9.1' type='text/css' media='all' />
+<link rel='stylesheet' id='megamenu-fontawesome-css'  href='wp-content/plugins/megamenu-pro/icons/fontawesome/css/font-awesome.min905d.css?ver=1.6.3' type='text/css' media='all' />
+<link rel='stylesheet' id='megamenu-genericons-css'  href='wp-content/plugins/megamenu-pro/icons/genericons/genericons/genericons905d.css?ver=1.6.3' type='text/css' media='all' />
+<link rel='stylesheet' id='styles-css'  href='wp-content/themes/amchart/style5859.css?ver=4.9.1' type='text/css' media='all' />
+<link rel='stylesheet' id='fancybox-css'  href='wp-content/plugins/easy-fancybox/fancybox/jquery.fancybox-1.3.8.minf24c.css?ver=1.6' type='text/css' media='screen' />
+<link rel="stylesheet" href="css/index.css" type="text/css">
+<link rel="stylesheet" href="css/jquery.countdown.css" type="text/css">
+<link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/web3.min.js"></script>
+  <script type="text/javascript" src="./abi/ABI_SaleImpl.js"></script>
+  <script type="text/javascript" src="./abi/ABI_ZGT.js"></script>
+  <script type="text/javascript" src="./abi/ABI_ZST.js"></script>
+
+
+<!-- start Simple Custom CSS and JS -->
+<style type="text/css">
+p, .accordion .link, .accordion li.default .submenu, .about-list li, .news-title,body {
+font-family:
+"Open Sans", san-serif;
+}
+.donation--goal {
+    margin-top: 5px;
+    /* width: 200px; */
+    font-size: 16px;
+    text-align: center;
+    color: #e83e3f;
+    /* position: absolute; */
+    /* right: -24%; */
+    font-family: "exobold", sans-serif;
+    position:relative;
+
+right:0;
+}
+.donation--title{
+    color: #525961;
+    font-weight: 600;
+  position:relative;
+  left:0;
+    /* position: absolute; */
+    /* left: -80px; */
+}
+.donation--container{
+	width: 0%;
+      /* position: absolute; */
+  position:static;
+    /* top: 50%; */
+  top:auto; left:auto;
+    /* left: 50%; */
+    /* transform: translate(-50%, -50%); */
+  transform: none;
+}</style>
+
+<script type="text/javascript">
+  var Web3 = require('web3');
+var web3 ;//= new Web3();
+
+function jsonpCallback(data) { 
+ if(data.address.country_code == 'US' || data.address.country_code == 'CN'){ 
+
+document.write('<br><h3 class="red-text wow fadeInUp">US/China-IP detected, participation not allowed</p></h3>');
+}else{
+document.write('<br><a class="btn red-btn" href="gettokens.html">Buy Tokens</a>');
+}
+ }
+
+
+  window.addEventListener('load', function() {
+
+
+	init();
+
+});
+
+ 
+ var address_zstsale = "0x6973324ff98bc41e2cebda66a8e5434d273082cf";
+ 
+ function detectNetwork() {
+	web3.version.getNetwork((err, netId) => {
+	if (netId != "1") {
+		alert("If you want to see the sale progress,please switch to main network.");
+	} else {
+		getSaleStatus();
+	}
+
+});
+}
+
+function getSaleStatus() {
+var contract_zstsale = web3.eth.contract(abi_zstsale).at(address_zstsale);
+	contract_zstsale.soldToken.call(function (error, result) {
+		console.log("soldZSTToken->"+result);
+		if (error == null) {
+			console.log("result="+result);
+			console.log(result/1000000000000000000);
+			var balance = result/1000000000000000000;
+			$("#soldZST").text("ZST Sold : "+balance.toFixed(4));		
+		} else {
+			console.log(error);
+		}
+	});
+}
+ 
+function init() {
+	if (typeof web3 !== 'undefined') {
+    console.log('Web3 found');
+    web3 = new Web3(web3.currentProvider);
+	detectNetwork();
+  } else {
+     console.error('web3 was undefined');
+	 alert("If you want to see the sale progress, please install metamask.");
+  }
+}
+</script>
+
+
+
+</head>
+
+<body class="home page-template-default page page-id-4 mega-menu-primary-menu page-home-page wpb-js-composer js-comp-ver-5.4.2 vc_responsive" id="startchange">
+	
+
+
+
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+<![endif]-->
+
+    <div>
+
+        <div class="bg-primary py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="row">
+                            <div class="col-1 align-self-center"><a href="http://www.zola.fun/"><img src="wp-content/themes/amchart/images/logos/logo.png" id="logoimg"></a></div>
+                            <div class="col-1 thin align-self-center" id="logo">
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="col-8 text-right thin align-self-center" id="balance"><b>YOUR BALANCE</b><br>No account selected.</div> -->
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-md navbar-light bg-secondary p-0">
+            <div class="container">
+                <button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav-item px-5">
+                            <a class="nav-link text-dark text-center" data-toggle="modal" data-target=".bd-example-modal-lg" href="index.html">Home</a>
+                        </li>
+						<li class="nav-item px-5">
+                            <a class="nav-link text-dark text-center" href="invest.html">Invest</a>
+                        </li>
+                        <li class="nav-item px-5">
+                            <a class="nav-link text-dark text-center" href="game-center.html">Game Center</a>
+                        </li>
+
+                        <li class="nav-item px-5">
+                            <a class="nav-link text-dark text-center" href="zolax.html">ZolaX</a>
+                        </li>
+                        <li class="nav-item px-5">
+                            <a class="nav-link text-dark text-center" href="faq.html">FAQ</a>
+                        </li>
+                        <li class="nav-item px-5">
+                            <a class="nav-link text-dark text-center" href="demo.html">Demo</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+        <div class="container text-center" style="padding-bottom: 130px; padding-top:150px;">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+					<h1 class="exo-bold wow fadeInUp">ZOLA SHARE TOKEN (ZST)</h1><br><br>
+                    <h1 class="exo-bold wow fadeInUp">A World Wide Charity Lottery Game Share Token<br><br>
+                        <span  data-wow-delay=".2s" class="red-text wow fadeInUp" >SALE ONGOING</span> <br><br>
+						<span  data-wow-delay=".2s" class="wow fadeInUp" id="soldZST">ZST Sold : </span> </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div data-wow-delay=".3s" class="col-md-12 text-center wow fadeInUp" >
+				<script src="http://api.wipmania.com/jsonp?callback=jsonpCallback"
+ type="text/javascript"></script>
+
+                </div>
+            </div>        </div>
+
+        <div data-wow-delay=".5s" class="white-text text-center wow fadeInUp" >
+            <div class="count-down-clock">
+                <div class="container ">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <p id="clock"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+					</div>
+				</div><br><p align="center" style="color:#f33;"> ZOLA Share Token (ZST) Sale first phase sale will end on Jul 31, 2018.</p>
+				</p>
+            </div>
+        </div>
+
+
+    </div>
+
+
+<span class="anchor" id="introduction-link"></span>
+
+<section id="introduction" class="section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 wow slideInLeft" data-wow-delay=".15s">
+                  <h3 class="exo-bold red-text">WHAT IS ZOLA?</h3>
+<p style="color:#333;">ZOLA is a decentralized charity lottery game platform based on Ethereum network, it is absolute transparent and fair, player use ZOLA game token to make a bet, one bet come with a 3, 4 or 6 digital number, at the end of each game period, platform will get 3, 4 or 6 digital number from the stock market as winning number, if your number exactly matches with the winning number then you will win, as the stock market is huge, no one can control it, and when the stock market closes, everyone knows what the winning number is and how it comes, so it is absolute transparent and fair to all players. 
+Before play the game, player will need to get ZOLA game token (ZGT), the offical way to get is exchange using ETH on ZolaX, ZolaX will keep a exchange platform where player can buy and sale the ZOLA game token, the exchange rate will be fixed for ever. </p>
+<br><br>
+<p style="color:#333;">
+As a charity lottery, in every game period (normally every workday), we will donate 10% of all bet tokens or equal ETHs to selected charity organizations in world wide, ZOLA share token holders will decide which charity organizations to receive the donations by voting, charity organizations can contact us for details of listing in our system.  
+</p>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="white-text text-center section-padding" >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 wow fadeInUp">
+                    <h3 class="exo-bold red-text" >HOW ZOLA WORKS</h3>
+<p style="color:#333;">ZOLA is built based on Ethereum network, user will need to get ZOLA game token(ZGT) before play, ZOLA game token can be got by exchanging using ETH, or you can buy it from other users, ZOLA will keep a exchange platform where player can buy and sale ZOLA game tokens, the exchange rate will be fixed for ever. We will run the lottery draw on every business day in different country regions (US and China at the first stage), every business day from 6:00AM-2:30PM is the time to make bet, after 2:30PM you cannot participate today's lottery game. When you make a bet, you will need to choose a 4 or 6 digital numbers from 0-9, and order them as your wish, numbers can be same on different positions, after the stock market closed, we will pick the 3 most important stock index from the region(for US zone, we will choose Nasdaq Composite, Dow Jones Average and S&P 500, for China zone, we will select SH000001, SZ399001 and SH000300), select 2 digital numbers after the decimal point from each of them to compose the winning number, we will have three types game, one is guess 3 numbers, one is guess 4 numbers and another is guess 6 numbers, if your bet has the exactly same 6 digital numbers, then you are one winner, different from PowerBall game, we will have 1 level prize, only when all of your number match exactly with the winning number, you will be winner, otherwise you cannot win, see more details please check <a href="faq.html">FAQ</a>. </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section-padding">
+        <div class="container wow fadeInUp">
+            <div class="row">
+                <div class="col-md-3">
+                    <h3 class="exo-bold red-text">Why it is absolute transparent and fair?</h3>
+                </div>
+                <div class="col-md-9" style="border-left: 1px solid #e83e3f;">
+                  <p class="red-text">Whenever you enter our website you will see how many and what numbers has been placed by other players, and when you select your number, you will know how many ZOLA game tokens you can win if you match different numbers. The most important thing is compare to other lotter games, ZOLA will pick the famous stock indexes to compose the winner number, so everyboday knows how the number comes and why the numbers come, unlike other lottery games, you never know how the winning number comes and why, but on ZOLA you will know, so it is absolute transparent and fair.</p>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+<br>
+<br>
+<br>
+
+
+<section class="white-text text-center section-padding" >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 wow fadeInUp">
+                    <h3 class="exo-bold red-text" >STATEMENT</h3>
+<p style="color:#333;">Any US, Canada & China citizen, permanent resident or registered institution is prohibited from purchasing ZOLA Share Token(ZST); ZST are not allowed to be sold to any US, Canada & China citizen, permanent resident or institution.<br>
+ZST do not represent any asset or right in the real world (such as the right to bonus shares, company shares or company voting rights).
+<br>
+Participants in the ZST token sale are advised to make prudent considerations and be knowledgeable of risks by fully reading the content on this website, the ZOLA white paper and other relevant materials.<br>
+
+*ZOLA.fun does not accept liability for our website, roadmap and whitepaper being accurate, complete or up-to-date or for its content nor is it responsible for direct, indirect, incidental or consequential damages resulting from any defect, error or failure to perform.<br>
+This website, roadmap and white paper contain forward-looking statements that involve risks, uncertainties and assumptions. If such risks or uncertainties materialize or such assumptions prove incorrect, the results of this website and its projections may differ materially from those expressed or implied by such forward-looking statements and assumptions. All statements other than statements of historical fact are statements that could be deemed forward-looking statements, including but not limited to statements of the plans, projected timelines, strategies and objectives of management for future operations; any statements concerning expected development, performance and services; anticipated operational and financial results; any statements of expectation or belief; project timelines and any statements of assumptions underlying any of the foregoing. Risks, uncertainties and assumptions include the achievement of expected results and meeting projected timelines described from time to time in quarterly timeline. The website without assuming any liability or responsibility may at any time in its complete discretion may decide to alter or modify the website objectives and/or strategies, projected timelines, or cease its operation altogether. The website assumes no obligation and may update these forward-looking statements and projected timelines as and when required.<br>
+The website, roadmap and whitepaper are intended solely for information purposes and are not to be construed, under any circumstances, by implication or otherwise, as an offer to sell or a solicitation to buy or sell or trade in any commodities, securities, or currencies. Information is obtained from sources believed to be reliable, but is in no way guaranteed. No guarantee of any kind is implied or possible where projections of future are attempted.  </p>
+                </div>
+            </div>
+        </div>
+    </section>
+<br>
+<br>
+
+
+<span class="anchor" id="faq-link"></span>
+    <section id="faq" class="section-padding" >
+        <div class="container wow fadeInUp">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h3 class="red-text exo-bold">FAQ'S</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <ul id="accordion" class="accordion">
+
+                                              <li class="default open">
+                            <div class="link"><p>What is ZOLA?</p>
+<i
+                                        class="fa fa-chevron-down"></i></div>
+                            <div class="submenu">
+                                <p>ZOLA is an Ethereum based lottery game platform, allow player to use ZOLA game tokens (ZGT) to make bet and to win ZOLA game tokens.</p>
+                            </div>
+
+                        </li>
+
+                                              <li class="">
+                            <div class="link"><p>What is the main difference between ZOLA and other lottery game platform?</p>
+<i
+                                        class="fa fa-chevron-down"></i></div>
+                            <div class="submenu">
+                                <p>ZOLA is an absolute transparent and fair lottery game platform, it let player knows how many the player can win when make a bet and player also knows how the winning number comes and why the winning number is that, it is totally transparent.</p>
+                            </div>
+
+                        </li>
+
+                                              <li class="">
+                            <div class="link"><p>What needed to play on ZOLA?</p>
+<i
+                                        class="fa fa-chevron-down"></i></div>
+                            <div class="submenu">
+                                <p>Player need to get ZOLA game tokens to play on ZOLA, ZOLA game tokens will be distributed to public, player can use ETH to exchange ZOLA game tokens.</p>
+                            </div>
+
+                        </li>
+						
+							<li class="">
+                            <div class="link"><p>What does ZOLA stand for?</p>
+<i
+                                        class="fa fa-chevron-down"></i></div>
+                            <div class="submenu">
+                                <p>ZOLA comes from ZO and LA, ZO is similiar to got, win in Chinese, LA means happy,pleasure.</p>
+                            </div>
+
+                        </li>
+
+						<li class="">
+                            <div class="link"><p>How to play?</p>
+<i
+                                        class="fa fa-chevron-down"></i></div>
+                            <div class="submenu">
+                                <p>Once you get ZOLA game token, you can participate in the game on business day, you need choose a number with 3, 4, or 6 integer digitals, like 123, 4565 or 434532, you can choose how many times to bet on the number, by default it is one.</p>
+                            </div>
+
+                        </li>
+
+							<li class="">
+                            <div class="link"><p>How can I win?</p>
+<i
+                                        class="fa fa-chevron-down"></i></div>
+                            <div class="submenu">
+                                <p>If your bet number is exactly same as the winning number then you will win. We will have 3 types games, guess 3/4/6 digital number, for any type game, your bet number should exactly match with the winning number to be a winner, otherwise you cannot win.</p>
+                            </div>
+
+                        </li>
+						
+						<li class="">
+                            <div class="link"><p>How does the winning number come?</p>
+<i
+                                        class="fa fa-chevron-down"></i></div>
+                            <div class="submenu">
+                                <p>On every business day, after the stock closed, ZOLA platform will pick 3 important indexes from the market, for US zone, it will select Nasdaq Composite, Dow Jones Average and S & P 500 (the order is fixed), and use the digital numbers after the decimal point from each of them to compose the winning number, for example:<br>
+								Nasdaq Composite is : 4233.3434<br>
+								Dow Jones Average  is : 2325.9232<br>
+								S & P 500 is : 8753.3543<br>
+								<br>
+								For guess 3 digital number game, the winning number is composed by the first digital after decimal point of each index: 3 + 9 + 8 => 398
+								<br><br>
+								For guess 4 digital number game, the winning number is composed by the first 2 digital number after decimal of Nasdaq Composite and Dow Jones Average : 34 + 92 => 3492
+								<br><br>
+								For guess 6 digital number game, the winning number is composed by the first 2 digital number after decimal of all three indexes : 34 + 92 + 35=> 349235
+
+								</p>
+                            </div>
+
+                        </li>
+						<br><br>
+						<p class="red-text">More questions? please see <a href="faq.html" class="blue-text">here</a></p>
+						
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+<div class="py-5 text-center text-secondary bg-primary">
+        <div class="container">
+            <div class="row">
+                <div class="p-4 col-md-4"> <img src="./fonts/fair.svg" class="img-fluid infographic">
+                    <h2 class="my-3"><b>100% FAIR PLAY</b></h2>
+                    <p class="text-light">ZOLA is a blockchain based lottery backed by Ethereum smart contract, which provides complete transparency and handles all tokens and enforces the rules. Winning number comes from stock market that no one can control.<br></p>
+                </div>
+                <div class="col-md-4 p-4"> <img src="./fonts/win.svg" class="img-fluid infographic">
+                    <h2 class="my-3"><b>HIGH RETURN RATE</b></h2>
+                    <p class="text-light">Unlike traditional lottery which has around 50% return rate, ZOLA will return 70% of the bet tokens back to the lottery pool, so that it will greatly increase the winning amount.</p>
+                </div>
+                <div class="col-md-4 p-4"> <img src="./fonts/random.svg" class="img-fluid infographic">
+                    <h2 class="my-3"><b>TRULY RANDOM</b></h2>
+                    <p class="text-light">ZOLA's winning number comes from main stock indexes, no one can control it and predict it. </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="py-5 mhy-5 text-white bg-primary">
+        <div class="container">
+            <section class="section-padding">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<h3 class="exo-bold red-text">FOLLOW US</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 text-center social-links">
+				<a href="https://bitcointalk.org/index.php?topic=2889161.0" target="_blank"><img src="wp-content/themes/amchart/images/logos/bitcointalk.png" alt=""></a>
+				<a href="https://twitter.com/Zola_fun" target="_blank"><img src="wp-content/themes/amchart/images/logos/twitter.png" alt=""></a>
+				<a href="https://www.facebook.com/Zolafun-120979731981649/" target="_blank"><img src="wp-content/themes/amchart/images/logos/fb.png" alt=""></a>
+				<a href="https://medium.com/@zola.fun" target="_blank"><img src="wp-content/themes/amchart/images/logos/medium.png" alt=""></a>
+				<a href="https://t.me/zola.fun" target="_blank"><img src="wp-content/themes/amchart/images/logos/mail.png" alt=""></a>
+			</div>
+		</div>
+	</div>
+</section>
+            <div class="row d-flex justify-content-center phy-2">
+                <p class="my-0 text-center">© Copyright 2018 ZOLA.FUN - All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+<div class="modal fade" id="getToken-alert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">Some Rules Here.</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary js-btnConfirm">Confirm</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/vendor/jquery.js"></script>
+<script type="text/javascript" src="js/vendor/popper.js"></script>
+<script type="text/javascript" src="js/vendor/bootstrap4.js"></script>
+<script type="text/javascript" src="js/vendor/particles.min.js"></script>
+<script type="text/javascript" src="js/vendor/effect.js"></script>
+<script type="text/javascript" src="js/vendor/detect.js"></script>
+<script type="text/javascript" src="js/vendor/jquery.plugin.min.js"></script> 
+<script type="text/javascript" src="js/vendor/jquery.countdown.min.js"></script>
+<script type="text/javascript" src="js/vendor/timer.js"></script>
+<script type='text/javascript' src='wp-content/plugins/contact-form-7/includes/js/scripts5859.js?ver=4.9.1'></script>
+<script type='text/javascript' src='bootstrap/3.3.6/js/bootstrap.mina4e6.js?ver=1.11.0'></script>
+<script type='text/javascript' src='ajax/libs/d3/3.5.5/d3.mina4e6.js?ver=1.11.0'></script>
+<script type='text/javascript' src='wp-content/themes/amchart/js/owl-carousel/owl.carousel.mina4e6.js?ver=1.11.0'></script>
+<script type='text/javascript' src='wp-content/themes/amchart/js/wow/wow.mina4e6.js?ver=1.11.0'></script>
+<script type='text/javascript' src='wp-content/themes/amchart/js/fuelfxa4e6.js?ver=1.11.0'></script>
+<script type='text/javascript' src='wp-includes/js/hoverIntent.minc245.js?ver=1.8.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var megamenu = {"timeout":"300","interval":"100"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='wp-content/plugins/megamenu/js/maxmegamenu7793.js?ver=2.4'></script>
+<script type='text/javascript' src='wp-content/plugins/megamenu-pro/assets/public905d.js?ver=1.6.3'></script>
+<script type='text/javascript' src='wp-includes/js/wp-embed.min5859.js?ver=4.9.1'></script>
+<script type='text/javascript' src='wp-content/plugins/easy-fancybox/fancybox/jquery.fancybox-1.3.8.minf24c.js?ver=1.6'></script>
+<script type='text/javascript' src='wp-content/plugins/easy-fancybox/js/jquery.easing.min2fca.js?ver=1.4.0'></script>
+<script type='text/javascript' src='wp-content/plugins/easy-fancybox/js/jquery.mousewheel.mina9d5.js?ver=3.1.13'></script>
+
+</body>
+
+</html>

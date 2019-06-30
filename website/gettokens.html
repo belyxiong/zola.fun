@@ -1,0 +1,363 @@
+<!doctype html>
+
+<html class="no-js" lang="">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="css/index.css" type="text/css">
+	<link rel="stylesheet" href="css/jquery.countdown.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <title>ZOLA - World Wide Charity Lottery Game</title>
+	
+
+
+
+<link rel='stylesheet' id='megamenu-css'  href='./wp-content/uploads/maxmegamenu/style0b55.css?ver=cfb26c' type='text/css' media='all' />
+<link rel='stylesheet' id='dashicons-css'  href='./wp-includes/css/dashicons.min5859.css?ver=4.9.1' type='text/css' media='all' />
+<link rel='stylesheet' id='megamenu-google-fonts-css'  href='http://fonts.googleapis.com/css?family=Open+Sans%3A400%2C700&amp;ver=4.9.1' type='text/css' media='all' />
+
+<link rel='stylesheet' id='styles-css'  href='./wp-content/themes/amchart/style5859.css?ver=4.9.1' type='text/css' media='all' />
+
+<!-- start Simple Custom CSS and JS -->
+<style type="text/css">
+p, .accordion .link, .accordion li.default .submenu, .about-list li, .news-title,body {
+font-family:
+"Open Sans", san-serif;
+}
+.donation--goal {
+    margin-top: 5px;
+    /* width: 200px; */
+    font-size: 16px;
+    text-align: center;
+    color: #e83e3f;
+    /* position: absolute; */
+    /* right: -24%; */
+    font-family: "exobold", sans-serif;
+    position:relative;
+
+right:0;
+}
+.donation--title{
+    color: #525961;
+    font-weight: 600;
+  position:relative;
+  left:0;
+    /* position: absolute; */
+    /* left: -80px; */
+}
+.donation--container{
+	width: 0%;
+      /* position: absolute; */
+  position:static;
+    /* top: 50%; */
+  top:auto; left:auto;
+    /* left: 50%; */
+    /* transform: translate(-50%, -50%); */
+  transform: none;
+}</style>
+  <script type="text/javascript" src="./js/web3.min.js"></script>
+<script type="text/javascript">
+
+var Web3 = require('web3');
+var web3 ;//= new Web3();
+
+var zstSaleAddress = "0xdA58Ce1a30Ae31e4262EDBCD12715DA9c4a89D6e";
+var curaddress;
+
+function jsonpCallback1(data) { 
+ if(data.address.country_code == 'US' || data.address.country_code == 'CN'){ 
+
+document.write('<p class="red-text">US/China-IP detected, participation not allowed</p>');
+}else{
+document.write('<p class="red-text"><b>0xda58ce1a30ae31e4262edbcd12715da9c4a89d6e</b></p>');
+}
+ }
+ 
+ function jsonpCallback2(data) { 
+ if(data.address.country_code != 'US' && data.address.country_code != 'CN'){ 
+
+document.write('<br>\
+					<p><b>Or input info in following box and click \"Buy\"</b></p>\
+					<br>\
+					<div align=\"left\">\
+\
+ZST to buy <input type="text" id="zstamount" value="10000" onkeyup="javascript:calculate1();"   style ="display：block;width: 100px;margin:0 auto;"  <br> <br>ETH cost <input type="text" id="ethcost" value="1.0" onkeyup="javascript:calculate2();"  style ="display：block;width: 100px;margin:0 auto;"> <br><br>ZGT Bonus <input type="text" id="zgtbonus" value="2000" disabled="true"  style ="display：block;width: 100px;margin:0 auto;">\
+<br><br>\
+<input type="submit" value="Buy" onclick="javascript:detectNetworkAndBuy();" >\
+</div>\
+					<br>');
+}
+ }
+ 
+ function jsonpCallback3(data) { 
+ if(data.address.country_code != 'US' && data.address.country_code != 'CN'){ 
+
+document.write('<br>\
+					<h4>Get ZOLA Share Tokens using BTC or other ways</h4>\
+					<br><br>\
+					<p>Please contact us <a href="https://t.me/zola.fun" target="_blank"><img src="../wp-content/themes/amchart/images/logos/mail.png" alt=""></a></p>\
+					<br>');
+}
+ }
+ 
+ function calculate1() {
+	var zstamount =$("#zstamount").val();
+	
+	if (zstamount.length>0) {
+
+	var x = parseFloat(zstamount) /10000;
+	
+	$("#ethcost").val(x);
+	$("#zgtbonus").val(zstamount*0.2);
+	}else{
+	$("#ethcost").val("0");
+	$("#zgtbonus").val("0");
+	}
+}
+
+function calculate2() {
+	var ethamount =$("#ethcost").val();
+	
+	if (ethamount>0){
+	var x = parseFloat(ethamount) * 10000;
+	$("#zstamount").val(x);
+	$("#zgtbonus").val(x*0.2);
+	}else{
+	$("#zstamount").val("0");
+	$("#zgtbonus").val("0");
+	}
+}
+
+
+function buyzst(sender){
+	var msg = "I confirm that I am NOT a U.S. Canada,China citizen, resident or entity (each a \"U.S., Canada or China Person\") nor am I purchasing ZST Tokens or signing on behalf of a  U.S. Canada,China Person.";
+	
+	if (!confirm(msg)){
+		return;
+	}
+
+	var ethamount =$("#ethcost").val();
+	var receiver = zstSaleAddress;
+	var amount = web3.toWei(parseFloat(ethamount), "ether");
+	web3.eth.sendTransaction({from: sender, to:receiver, value: amount, gasLimit: 21000, gasPrice: 2000000000}, function(error){});
+}
+
+
+
+window.addEventListener('load', function() {
+init();
+});
+
+function init() {
+  if (typeof web3 !== 'undefined') {
+    console.log('Web3 found');
+    web3 = new Web3(web3.currentProvider);
+  } else {
+     console.error('web3 was undefined');
+	 alert("Please install metamask and unlock account.");
+  }
+}
+
+
+function getAccountAndBuy() {
+	web3.eth.getAccounts(function(error, result) {
+    if(error != null) {
+        console.log("Couldn't get accounts");
+		alert("WOW, some unknown errors happens.");
+	} else {
+		curaddress = result[0];
+		web3.eth.defaultAccount = curaddress;
+		if (curaddress != 'undefined') {
+			var strAddress = new String(curaddress);
+			if ((strAddress.indexOf("0x") >=0 || strAddress.indexOf("0X") >=0) &&(strAddress.length>20)) {
+				console.log("My address:"+strAddress);
+				buyzst(curaddress);
+			} else {
+				alert("Did you unlock your account?");
+			}
+		} else {
+			alert("Did you unlock your account?");
+		}
+	}
+   });
+}
+
+function detectNetworkAndBuy() {
+web3.version.getNetwork((err, netId) => {
+	if (netId != "1") {
+		alert("Please switch to main network.");
+	} else {
+		getAccountAndBuy();
+	}
+	
+});
+}
+ </script>
+</head>
+
+<body class="post-template-default single single-post postid-162 single-format-standard mega-menu-primary-menu post-amchart-featured-on-houston-business-journal wpb-js-composer js-comp-ver-5.4.2 vc_responsive" id="startchange">
+
+	<div class="bg-primary py-4">
+		<div class="container">
+			<div class="row">
+				<div class="col-4">
+					<div class="row">
+						<div class="col-1 align-self-center"><a href="http://www.zola.fun/"><img src="wp-content/themes/amchart/images/logos/logo.png" id="logoimg"></a></div>
+						<div class="col-1 thin align-self-center" id="logo">
+
+						</div>
+					</div>
+				</div>
+				<!--<div class="col-8 text-right thin align-self-center" id="balance"><b>YOUR BALANCE</b><br>No account selected.</div> -->
+			</div>
+		</div>
+	</div>
+	<nav class="navbar navbar-expand-md navbar-light bg-secondary p-0">
+		<div class="container">
+			<button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span></button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="nav navbar-nav mr-auto">
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="index.html">Home</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="invest.html">Invest</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="game-center.html">Game Center</a>
+					</li>
+					
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="zolax.html">ZolaX</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="faq.html">FAQ</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="demo.html">Demo</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</nav>
+    <section>
+        <div class="">
+            <div class="container content" style="background:transparent;">
+                <div class="col-md-9">
+	<section>
+        <div >
+            <div class="container content"  style="background:transparent;">
+                <div class="col-md-9">
+				<h3 align="center">ZOLA Share Token(ZST) Sale Ongoing</h3>
+				<br>
+				<b>
+				<h4 align="center" id="zstrate">Current ZST sale rate : 1 ETH = 10000 ZST</h4>
+				<h4 align="center" id="zgtbonusrate">Current ZST Bonus rate : 35%</h4>
+				<h4 align="center" id="zgtbonusrate">Current ZGT Bonus rate : 20%</h4>
+				</b>
+				<br>
+				<h4>4 phases of token sale</h4><br>
+				<p>Pre-Sale (0 -  20,000,000) : 1 ETH = 10000 ZST + 35% ZST Bonus + 20% ZGT Bonus</p>
+				<p>Phase 1 (20,000,001 - 80,000,000):  1 ETH = 6000 ZST + 20% ZST Bonus + 10% ZGT Bonus</p>
+				<p>Phase 2 (80,000,001 - 200,000,000):  1 ETH = 3500 ZST + 15% ZST Bonus + 5% ZGT Bonus</p>
+				<p>Phase 3 (200,000,001 - 400,000,000):  1 ETH = 2000 ZST + 5% ZST Bonus + 1% ZGT Bonus</p>
+				<br><br>
+                    <h4> How to get ZOLA Share tokens - (Exchange with ETH)</h4><br>
+					<p>1. Open Ethereum wallet with support of tokens (for example MyEtherWallet, MetaMask).</p>
+					<p>2. Click to "Send Ether & Tokens"</p>
+					<p>3. Copy following contract address:</p>
+					<script src="http://api.wipmania.com/jsonp?callback=jsonpCallback1"
+ type="text/javascript"></script>
+					
+					<p>4. Put gas: 200,000</p>
+					<p>5. Send the ETH 
+					<p>6. Enjoy tokens at your wallet 
+					</p>
+					</p><br>
+					
+					
+					<script src="http://api.wipmania.com/jsonp?callback=jsonpCallback2"
+ type="text/javascript"></script>
+					
+					<script src="http://api.wipmania.com/jsonp?callback=jsonpCallback3"
+ type="text/javascript"></script>
+					
+					<br>
+					<h4> How to see ZOLA tokens (ZST/ZGT) in your wallet</h4>
+					<br>
+					<h5>If you are using MetaMask:</h5><br>
+					<p>1. Open MetaMask extension and unlock your wallet using the password.</p>
+					<p>2. Select the tab "TOKENS".</p>
+					<p>3. Now, click on "ADD TOKEN".</p>
+					<p>4. Input ZOLA Share Token address (<b>0x0586b71579f421fcabc071bba461bc7ac245501a</b>), the Token symbol should be set to "ZST" automatically and Decimals of Precision should be set to "18" automatically, if not, please double check if the token address is correct or not, after that, click "ADD", do same for ZGT, ZGT address (<b>0x064f9fdb746fc4a58cbde8c3f1f3979b2c43e748</b>).</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <div class="py-5 mhy-5 text-white bg-primary">
+		<div class="container">
+            <section class="section-padding">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<h3 class="exo-bold red-text">FOLLOW US</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 text-center social-links">
+				<a href="https://bitcointalk.org/index.php?topic=2889161.0" target="_blank"><img src="wp-content/themes/amchart/images/logos/bitcointalk.png" alt=""></a>
+				<a href="https://twitter.com/Zola_fun" target="_blank"><img src="wp-content/themes/amchart/images/logos/twitter.png" alt=""></a>
+				<a href="https://www.facebook.com/Zolafun-120979731981649/" target="_blank"><img src="wp-content/themes/amchart/images/logos/fb.png" alt=""></a>
+				<a href="https://medium.com/@zola.fun" target="_blank"><img src="wp-content/themes/amchart/images/logos/medium.png" alt=""></a>
+				<a href="https://t.me/zola.fun" target="_blank"><img src="wp-content/themes/amchart/images/logos/mail.png" alt=""></a>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<div class="modal fade only-rinkeby-supported" id="must-be-main-network" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-secondary">
+      <div class="modal-header bg-primary">
+          <h5 class="modal-title thin text-light" id="exampleModalLabel"><b>UNSUPPORTED</b> NETWORK</h5>
+        <button type="button" class="close color-white" style="color:white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body text-dark">
+          <p>To buy ZST/ZGT</p>
+          <p>Please switch over to <b>MAIN</b> network.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+            <div class="row d-flex justify-content-center phy-2">
+                <p class="my-0 text-center">© Copyright 2018 ZOLA.FUN - All rights reserved.</p>
+            </div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/vendor/jquery.js"></script>
+	<script type="text/javascript" src="js/vendor/popper.js"></script>
+	<script type="text/javascript" src="js/vendor/bootstrap4.js"></script>
+	<script type="text/javascript" src="js/vendor/particles.min.js"></script>
+	<script type="text/javascript" src="js/vendor/effect.js"></script>
+    <script type="text/javascript" src="js/vendor/detect.js"></script>
+	<script type="text/javascript" src="js/vendor/jquery.plugin.min.js"></script> 
+	<script type="text/javascript" src="js/vendor/jquery.countdown.min.js"></script>
+	<script type="text/javascript" src="js/vendor/timer.js"></script>
+</body>
+</html>

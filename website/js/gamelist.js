@@ -1,0 +1,31 @@
+var gameinfostr_cn = '{"gameinfo":[' +
+		'{"gameid":0, "group":"A","team1":"Russia", "team2":"Saudi","time":"06/14/2018 18:00:00", "expired":1},'+
+		'{"gameid":1, "group":"A","team1":"Egypt", "team2":"Uruguay","time":"06/15/2018 14:00:00", "expired":1},'+
+		'{"gameid":2, "group":"B","team1":"Morocco", "team2":"Iran","time":"06/15/2018 17:00:00", "expired":1},'+
+		'{"gameid":3, "group":"B","team1":"Portugal", "team2":"Spain","time":"06/15/2018 20:00:00", "expired":1},'+
+		'{"gameid":4, "group":"C","team1":"France", "team2":"Australia","time":"06/16/2018 12:00:00", "expired":1},'+
+		'{"gameid":5, "group":"D","team1":"Argentina", "team2":"Iceland","time":"06/16/2018 15:00:00", "expired":1},'+
+		'{"gameid":6, "group":"C","team1":"Peru", "team2":"Denmark","time":"06/16/2018 18:00:00", "expired":1},'+
+		'{"gameid":7, "group":"D","team1":"Croatia", "team2":"Nigeria","time":"06/16/2018 21:00:00", "expired":1},'+
+		'{"gameid":8, "group":"E","team1":"CostaRica", "team2":"Serbia","time":"06/17/2018 14:00:00", "expired":1},'+
+		'{"gameid":9, "group":"F","team1":"Germany", "team2":"Mexico","time":"06/17/2018 17:00:00", "expired":1},'+
+		'{"gameid":10, "group":"E","team1":"Brazil", "team2":"Switzerland","time":"06/17/2018 20:00:00", "expired":1},'+
+		'{"gameid":11, "group":"F","team1":"Sweden", "team2":"Korea","time":"06/18/2018 14:00:00", "expired":1},'+
+		'{"gameid":12, "group":"G","team1":"Belgium", "team2":"Panama","time":"06/18/2018 17:00:00", "expired":1},'+
+		'{"gameid":13, "group":"G","team1":"Tunisia", "team2":"England","time":"06/18/2018 20:00:00", "expired":1},'+
+		'{"gameid":14, "group":"H","team1":"Poland", "team2":"Senegal","time":"06/19/2018 14:00:00", "expired":0},'+
+		'{"gameid":15, "group":"H","team1":"Colombia", "team2":"Japan","time":"06/19/2018 17:00:00", "expired":0},'+
+		'{"gameid":16, "group":"A","team1":"Russia", "team2":"Egypt","time":"06/19/2018 20:00:00", "expired":0},'+
+		'{"gameid":17, "group":"B","team1":"Portugal", "team2":"Morocco","time":"06/20/2018 14:00:00", "expired":0},'+
+		'{"gameid":18, "group":"A","team1":"Uruguay", "team2":"Saudi","time":"06/20/2018 17:00:00", "expired":0},'+
+		'{"gameid":19, "group":"B","team1":"Iran", "team2":"Spain","time":"06/20/2018 20:00:00", "expired":0},'+
+		'{"gameid":20, "group":"C","team1":"France", "team2":"Peru","time":"06/21/2018 14:00:00", "expired":0},'+
+		'{"gameid":21, "group":"C","team1":"Denmark", "team2":"Australia","time":"06/21/2018 17:00:00", "expired":0},'+
+		'{"gameid":22, "group":"D","team1":"Argentina", "team2":"Croatia","time":"06/21/2018 20:00:00", "expired":0},'+
+		'{"gameid":23, "group":"E","team1":"Brazil", "team2":"CostaRica","time":"06/22/2018 14:00:00", "expired":0},'+
+		'{"gameid":24, "group":"D","team1":"Nigeria", "team2":"Iceland","time":"06/22/2018 17:00:00", "expired":0},'+
+		'{"gameid":25, "group":"E","team1":"Serbia", "team2":"Switzerland","time":"06/22/2018 20:00:00", "expired":0},'+
+		'{"gameid":26, "group":"G","team1":"Belgium", "team2":"Tunisia","time":"06/23/2018 14:00:00", "expired":0},'+
+		'{"gameid":27, "group":"F","team1":"Germany", "team2":"Sweden","time":"06/23/2018 17:00:00", "expired":0},'+
+		'{"gameid":28, "group":"F","team1":"Korea", "team2":"Mexico","time":"06/23/2018 20:00:00", "expired":0}'+
+		']}';

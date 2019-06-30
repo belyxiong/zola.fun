@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)https://millionairemakers.io/ -->
+<body>
+<html>
+</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#5F1465">
+	<!-- generics -->
+	<!-- Windows 8.1 + IE11 and above -->
+	<meta name="msapplication-config" content="favicon/browserconfig.xml">
+	<link rel="stylesheet" href="css/index.css" type="text/css">
+	<link rel="stylesheet" href="css/jquery.countdown.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+	<title>Zola Game Center - WorldCup 2018</title>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+
+	<script type="text/javascript" src="./js/gameinfo.js"></script>
+
+
+
+	  <script type="text/javascript" src="./abi/abi_zgt.js"></script>
+  <script type="text/javascript" src="./abi/abi_zst.js"></script>
+  <script type="text/javascript" src="./abi/abi_worldcup.js"></script>
+	<script type="text/javascript" src="./abi/abi_zolax.js"></script>
+	<script type="text/javascript" src="./js/web3.min.js"></script>
+	<script type="text/javascript" src="./js/contractmanager.js"></script>
+	<script type="text/javascript" src="./js/phphelper.js"></script>	
+<script type="text/javascript" src="./js/initAndLoadBalance.js"></script>
+	<script type="text/javascript" src="./js/worldcup.js"></script>
+	<script type="text/javascript" src="./js/gamecontent.js"></script>
+	<script>
+	var curgameid = 0;
+	var gameexpired = 0;
+	var betlist = new Array();
+	window.addEventListener('load', function() {
+		init();
+		updateBetCart(0, 0, 0);
+		loadGameInfo();
+	});
+	showpoolinfo  = function () {
+		alert("70% of bet tokens are put into the pool.");
+	}
+	function onNetworkError() {
+		console.log("wrong network.");
+		if (NETWORK2USE == "4") {
+			$('#only-rinkeby-supported').modal({backdrop:false});
+		} else if (NETWORK2USE == "1") {
+			$('#only-main-supported').modal({backdrop:false});
+		}
+	}
+	
+	getIntValue = function (strVal) {
+	switch(strVal) {
+		case "value0":
+			return '0';
+		case "value1":
+			return '1';
+		case "value2":
+			return '2';
+		case "value3":
+			return '3';
+		case "value4":
+			return '4';
+		case "value5":
+			return '5';
+		case "value6":
+			return '6';
+		case "value7":
+			return '7';
+		case "value8":
+			return '8';
+		case "value9":
+			return '9';
+		case "value10":
+			return '10';
+		default:
+			return 0;
+	}
+}
+
+	function getGameInfo(_id) {
+		for(index=0;index<AllGameInfo.length;index++) {
+			if (AllGameInfo[index].gameid == _id) {
+				return  AllGameInfo[index];
+			}
+		}
+	}
+	
+	function addcart() {
+		gameinfo = getGameInfo(curgameid);
+		if (gameinfo.expired == 1) {
+			alert("Game expired.");
+			return;
+		}
+		multiple=$("#multipleselect_game0").val();
+		if (multiple == "valueNone") {
+			alert("Please select how many multiple to bet.");
+			return;
+		}
+		multiple = parseInt(getIntValue(multiple));
+
+		betcontent = $("input[name='radiogroup_game0']:checked").val();
+		
+
+		team1name = gameinfo.team1;
+		team2name = gameinfo.team2;
+		
+		
+		betInfo = new Object();
+		betInfo.gameid = parseInt(curgameid);
+		betInfo.team1 = team1name;
+		betInfo.team2 = team2name;
+		betInfo.betContent = parseInt(betcontent);
+		betInfo.multiple = multiple;
+		
+		mergeBetInfo(betInfo);
+		updateBetCart();
+	}
+	
+	function mergeBetInfo(betInfo) {
+		if (betlist.length > 0) {
+			var found = false;
+			for (i=0;i<betlist.length;i++) {
+				if (betlist[i].gameid == betInfo.gameid && betlist[i].betContent == betInfo.betContent) {
+					betlist[i].multiple += betInfo.multiple;
+					found = true;
+				}
+			}
+			if (!found) {
+				betlist.push(betInfo);
+			}
+		} else {
+			betlist.push(betInfo);
+		}
+	}
+	
+	function updateBetCart() {
+		var content = "<tr><th style='color:black'>ID</th><th style='color:black'>Team1</th><th style='color:black'>Team2</th><th style='color:black'>Bet</th><th style='color:black'>Multiple</th><th style='color:black'>OP</th></tr>";
+		var totalcost = 0;
+		for (i=0;i<betlist.length;i++) {
+			content += "<tr><td>"+betlist[i].gameid+"</td>";
+			content += "<td>"+betlist[i].team1+"</td>";
+			content += "<td>"+betlist[i].team2+"</td>";
+			var bet;
+			switch(betlist[i].betContent) {
+				case 0: bet = betlist[i].team1 + " win";  break;
+				case 1: bet = betlist[i].team2 + " win";  break;
+				case 2: bet = "Draws";  break;
+			}
+			content += "<td>"+bet+"</td>";
+			content += "<td>"+betlist[i].multiple+"</td>";
+			content += "<td><Button onclick='javascript:removeBetInfo("+i+");'>Remove</Button></td></tr>";
+			totalcost += betlist[i].multiple;
+		}
+		content += "<tr><td colspan='3'>Total cost : "+totalcost+" &nbsp; ZGT</td><td colspan='3'><Button onclick='javascript:clearBetInfo();'>Clear</Button></td></tr>";
+		$("#cartinfo").html(content);
+	}
+	function removeBetInfo(index) {
+		betlist.splice(index, 1);
+		updateBetCart();
+	}
+	
+	function clearBetInfo() {
+		betlist = new Array();
+		updateBetCart();
+	}
+	
+	
+	function placeBet() {
+		var betstr = "";
+		var totalcost = 0;
+		for (i=0;i<betlist.length;i++) {
+			totalcost += betlist[i].multiple;
+			betstr += betlist[i].gameid + "|" + betlist[i].betContent + "|" + betlist[i].multiple + "|";
+		}
+		if (totalcost<=0) {
+			return;
+		}
+		token2use = $("input[name='placebet_selection']:checked").val();
+		var info = "";
+		if (token2use == 0) {
+			if (totalcost > myZGTBalance) {
+				alert("No enough ZGT balance to use, please get more and try again.");
+				return;
+			}
+			info = "Are you sure to use "+totalcost+" ZGT balance to bet?";
+		} else {
+			if (totalcost > myDepositZGT) {
+				alert("No enough deposited ZGT to use, please deposit more and try again.");
+				return;
+			}
+			info = "Are you sure to use "+totalcost+" ZGT deposit to bet?";
+		}
+		if (confirm(info)) {
+			if (token2use == 0) {//balance
+				makeBet(token2use, totalcost, betstr);
+			} else {//deposit
+				//insert into DB
+				console.log("recording bet...");
+				//(player, gameid, betcontent, multiple, stat : 0, not processed, 1 : processed)
+				for (i=0;i<betlist.length;i++) {
+					insertRequest(curaddress, betlist[i].gameid, betlist[i].betContent, betlist[i].multiple, 0);
+				}
+				clearBetInfo();
+				getAccountBalances(curaddress);
+				alert("Submitted, please wait ...");
+			}
+		}
+	}
+	
+	function usebalanceinfo() {
+		alert("You will use your ZGT balances to bet and you need pay ETH gas fee, the confirm time depends on the gas fee you pay.");
+	}
+	
+	function usedepositinfo() {
+		alert("We will use your deposited ZGT to bet, you dont pay ETH gas fee, but it may take up to 24 hours to confirm.");
+	}
+	</script>
+	</head>
+<body background="images/worldcupbg.jpg"  style=" background-repeat:no-repeat ;background-size:100% 100%; background-attachment:fixed;">
+	<!-- <div id="particles-js"><canvas class="particles-js-canvas-el" style="width: 100%; height: 100%;" width="1093" height="925"></canvas></div> -->
+	<div class="bg-primary py-4" style="background:transparent;">
+		<div class="container">
+			<div class="row">
+				<div class="col-4">
+					<div class="row">
+                            <div class="col-1 align-self-center"><a href="http://www.zola.fun/"><img src="wp-content/themes/amchart/images/logos/logo.png" id="logoimg"></a></div>
+                            <div class="col-1 thin align-self-center" id="logo">
+
+                            </div>
+                        </div>
+				</div>
+				<div class="col-8 text-right thin align-self-left" id="balances"><b>Your address:</b><br>ETH:<br>ZST:<br>ZGT:<br>ZGT Won:<br>ZGT Deposit:</div>
+			</div>
+		</div>
+	</div>
+	<nav class="navbar navbar-expand-md navbar-light bg-secondary p-0">
+		<div class="container" style="background:transparent;">
+			<button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span></button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="nav navbar-nav mr-auto">
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="index.html">Home</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</nav>
+	<div class="fixed-account" id="carcontent">
+		<table class="table" border="1">
+			<tbody>
+				<tr>
+					<td colspan="6" align="center"><b>Shopping Cart</b></td>
+				</tr>
+				<tr id="cartinfo">
+					
+				</tr>
+				<tr>
+					<td colspan="6"><Button class="btn btn-primary " onclick="javascript:placeBet();">Place Bet</Button>&nbsp;&nbsp;&nbsp;
+					
+						<input type="radio" name="placebet_selection" value="0" checked style="color:white">Use Balance</input>&nbsp;(<a href="javascript:usebalanceinfo()">?</a>)&nbsp;&nbsp;
+						<input type="radio" name="placebet_selection" value="1" style="color:white">Use Deposit</input>&nbsp;(<a href="javascript:usedepositinfo()">?</a>)
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="py-5 text-center text-uppercase">
+		<div class="container phy-5">
+			<div class="row" id="error"></div>
+			<div class="row">
+				<div class="col-md-12 text-white thin">
+					<h1 class="display-3 mb-4 thin" id="main-title">
+						<b id="gamerunning">2018 FIFA WorldCup Game</b>
+
+					</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+<div class="col-md-12 bg-secondary text-dark p-4 my-3 game-park" style="background: rgba(255,204,51, 0.3);">
+
+		<div id="gamelist"><p>Select a game to bet</p>
+	
+		</div>
+		<div class="list-park col-md-12" id="gamearea">
+			
+		</div>
+	</div>
+	
+	   <div class="py-5 mhy-5 text-white bg-primary" style="background:transparent;">
+        <div class="container">
+            <section class="section-padding">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<h3 class="exo-bold red-text">FOLLOW US</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 text-center social-links">
+				<a href="https://bitcointalk.org/index.php?topic=2889161.0" target="_blank"><img src="wp-content/themes/amchart/images/logos/bitcointalk.png" alt=""></a>
+				<a href="https://twitter.com/Zola_fun" target="_blank"><img src="wp-content/themes/amchart/images/logos/twitter.png" alt=""></a>
+				<a href="https://www.facebook.com/Zolafun-120979731981649/" target="_blank"><img src="wp-content/themes/amchart/images/logos/fb.png" alt=""></a>
+				<a href="https://medium.com/@zola.fun" target="_blank"><img src="wp-content/themes/amchart/images/logos/medium.png" alt=""></a>
+				<a href="https://t.me/zola.fun" target="_blank"><img src="wp-content/themes/amchart/images/logos/mail.png" alt=""></a>
+			</div>
+		</div>
+	</div>
+</section>
+            <div class="row d-flex justify-content-center phy-2">
+                <p class="my-0 text-center">© Copyright 2018 ZOLA.FUN - All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+	    <!-- Modal Unspuorrted network-->
+<div class="modal fade only-rinkeby-supported" id="only-rinkeby-supported" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-secondary">
+      <div class="modal-header bg-primary">
+          <h5 class="modal-title thin text-light" id="exampleModalLabel"><b>UNSUPPORTED</b> NETWORK</h5>
+        <button type="button" class="close color-white" style="color:white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body text-dark">
+          <p>Game currently running on <b>Rinkeby Network</b></p>
+          <p>Please switch over to Rinkeby network to play.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade only-main-supported" id="only-main-supported" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-secondary">
+      <div class="modal-header bg-primary">
+          <h5 class="modal-title thin text-light" id="exampleModalLabel"><b>UNSUPPORTED</b> NETWORK</h5>
+        <button type="button" class="close color-white" style="color:white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body text-dark">
+          <p>Game currently running on <b>Ethereum Main Network</b></p>
+          <p>Please switch over to Main network to play.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+	
+	<script type="text/javascript" src="js/vendor/jquery.js"></script>
+	<script type="text/javascript" src="js/vendor/popper.js"></script>
+	<script type="text/javascript" src="js/vendor/bootstrap4.js"></script>
+	<script type="text/javascript" src="js/vendor/particles.min.js"></script>
+	<script type="text/javascript" src="js/vendor/effect.js"></script>
+    <script type="text/javascript" src="js/vendor/detect.js"></script>
+	<script type="text/javascript" src="js/vendor/jquery.plugin.min.js"></script> 
+	<script type="text/javascript" src="js/vendor/jquery.countdown.min.js"></script>
+	<script type="text/javascript" src="js/vendor/timer.js"></script>
+	<script type="text/javascript" src="js/vendor/index.js"></script>
+</body>
+</html>

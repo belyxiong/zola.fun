@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)https://millionairemakers.io/ -->
+<body>
+<html>
+</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#5F1465">
+	<!-- generics -->
+	<!-- Windows 8.1 + IE11 and above -->
+	<meta name="msapplication-config" content="favicon/browserconfig.xml">
+	<link rel="stylesheet" href="css/index.css" type="text/css">
+	<link rel="stylesheet" href="css/jquery.countdown.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+	<title>Zola.Fun - Buy/Sale ZGT</title>
+	  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+  <script type="text/javascript" src="./abi/ABI_ZGT.js"></script>
+  <script type="text/javascript" src="./abi/ABI_ZST.js"></script>
+	<script type="text/javascript" src="./abi/abi_zolax.js"></script>
+	<script type="text/javascript" src="./js/web3.min.js"></script>
+	
+	<script>
+var Web3 = require('web3');
+var web3 ;//= new Web3();
+var curaddress="";
+
+
+var DECIMAL = 1000000000000000000;
+var toFixedPrecisis = 2;
+//**********rinkeby network address************
+
+//zgt contract address
+var zgtaddress_rinkeby = "0x8C32eAA1F339c76DA45C812C6EC318CB52e73C61";
+//zst contract address
+var zstaddress_rinkeby = "0x231E51BeA7F9D7C0d685d6c89f017Cf885e005fd";
+//worldcupgame address
+var worldcupgameaddress_rinkeby ="0x01586C48fC32C7359be0f656b235A0099cb1E516";
+//zolax address
+var zolaxaddress_rinkeby = "0xb0c061c97D9c7F2e063acfd7167BF089B3971D4b";
+
+
+
+var NETWORK2USE = "4";//1 : main, 4 : rinkeby
+
+
+var ABI_zgt = abi_zgt;
+var ABI_zst = abi_zst;
+var ABI_zolax = abi_zolax;
+
+var myEthBalance = 0;
+var myZSTBalance = 0;
+var myZGTBalance = 0;
+var myWonZGTBalance = 0;
+var myDepositZGT = 0;
+
+
+window.addEventListener('load', function() {
+		init();
+
+	});
+init = function () {
+  if (typeof web3 !== 'undefined') {
+    console.log('Web3 found');
+    web3 = new Web3(web3.currentProvider);
+	detectNetwork();
+  } else {
+     console.error('web3 was undefined');
+	 alert("Please install metamask and unlock account.");
+  }
+}
+
+
+
+
+function detectNetwork() {
+web3.version.getNetwork((err, netId) => {
+	if (netId != NETWORK2USE) {
+	  //alert(msg);
+	  onNetworkError();
+	} else {
+		getCurrentAccount();
+	}
+	/*
+  switch (netId) {
+    case "1":
+      console.log('This is mainnet')
+      break
+    case "2":
+      console.log('This is the deprecated Morden test network.')
+      break
+    case "3":
+      console.log('This is the ropsten test network.')
+      break
+    case "4":
+      console.log('This is the Rinkeby test network.')
+      break
+    case "42":
+      console.log('This is the Kovan test network.')
+      break
+    default:
+      console.log('This is an unknown network.')
+  }
+  */
+});
+}
+
+
+function getCurrentAccount() {
+	web3.eth.getAccounts(function(error, result) {
+    if(error != null) {
+        console.log("Couldn't get accounts");
+		alert("WOW, some unknown errors happens.");
+	} else {
+		curaddress = result[0];
+		console.log("curaddress->"+curaddress);
+		web3.eth.defaultAccount = curaddress;
+		if (curaddress != 'undefined') {
+			var strAddress = new String(curaddress);
+			console.log("strAddress->"+strAddress);
+			if ((strAddress.indexOf("0x") >=0 || strAddress.indexOf("0X") >=0) &&(strAddress.length>20)) {
+				console.log("strAddress-2>"+strAddress);
+				getAccountBalances(curaddress);
+			} else {
+				alert("Please unlock account.");
+				curaddress = "<b style='color:red'>please unlock account.</b>";
+				showBalances();
+			}
+		} else {
+			alert("Did you unlock your account?");
+		}
+	}
+   });
+}
+
+
+
+function setETHBalance(eth_balance) {
+	myEthBalance = eth_balance;
+	showBalances();
+}
+	
+function setZSTBalance(zst_balance) {
+	myZSTBalance = zst_balance;
+	showBalances();
+}
+
+function setZGTBalance(zgt_balance) {
+	myZGTBalance = zgt_balance;
+	showBalances();
+	$("#availablezgt").html("(Available : "+zgt_balance+" ZGT)");
+}
+
+function setWonZGT(zgt_won) {
+	myWonZGTBalance = zgt_won;
+	showBalances();
+}
+
+function setDepositZGTBalance(zgt_deposit) {
+	myDepositZGT = zgt_deposit;
+	console.log("checking onhold");
+	checkDepositOnHold(curaddress);
+//	showBalances();
+}
+
+function showBalances() {
+	var ethstr = "<b>Your address:"+curaddress+"</b><br>ETH:"+myEthBalance;
+	var zststr = "<br>ZST:"+myZSTBalance;
+	var zgtstr = "<br>ZGT:"+myZGTBalance ;
+
+	var zgtwonstr = "<br>ZGT Won:"+myWonZGTBalance;
+	if (myWonZGTBalance>0) {
+		zgtwonstr += "&nbsp;&nbsp;<a href='javascript:withdraw();'>Withdraw</a>&nbsp;&nbsp;<a href='javascript:withdraw();'>WithdrawETH</a>&nbsp;&nbsp;<a href='javascript:withdraw();'>Deposit</a>";
+	}
+	var zgtDeposit = "<br>ZGT Deposit:"+myDepositZGT;
+
+	var content = ethstr + zststr + zgtstr + zgtwonstr + zgtDeposit;
+	//alert(content);
+	$("#balances").html(content);
+}
+
+function getAccountBalances(address) {
+	if (NETWORK2USE == "1") {
+		zgtToken = web3.eth.contract(ABI_zgt).at(zgtaddress);
+		zstToken = web3.eth.contract(ABI_zst).at(zstaddress);
+	//	zolax_contract = web3.eth.contract(ABI_zolax).at(zolaxaddress);
+	} else if (NETWORK2USE == "4") {
+		zgtToken = web3.eth.contract(ABI_zgt).at(zgtaddress_rinkeby);
+		zstToken = web3.eth.contract(ABI_zst).at(zstaddress_rinkeby);
+		zolax_contract = web3.eth.contract(ABI_zolax).at(zolaxaddress_rinkeby);
+	}
+	console.log("getBalances->"+address);
+	
+	web3.eth.getBalance(address, function (error, result){
+		console.log("result->"+result);
+		if (error == null) {
+			var eth = web3.fromWei(result);
+			console.log("eth->"+eth);
+			setETHBalance(eth);
+		} else {
+			console.log(error);
+		}
+	});
+
+	
+	zgtToken.balanceOf(address, function (error, result) {
+		console.log("zgt->"+result);
+		if (error == null) {
+			console.log("result="+result);
+			console.log(result/DECIMAL);
+			var balance = result/DECIMAL;
+			myzgtbalance = balance.toFixed(toFixedPrecisis);
+			setZGTBalance(myzgtbalance);
+		} else {
+			console.log(error);
+		}
+	});
+
+	zstToken.balanceOf(address, function (error, result) {
+		console.log("zst->"+result);
+		if (error == null) {
+			console.log("result="+result);
+			console.log(result/DECIMAL);
+			var balance = result/DECIMAL;
+			setZSTBalance(balance.toFixed(toFixedPrecisis));//+'   <a href="invest.html">Buy More</a>');
+		} else {
+			console.log(error);
+		}
+	});
+	
+	zolax_contract.getWinBalance(address, function (error, result) {
+		console.log("error->"+error);
+		if (error == null) {
+			console.log("result="+result);
+			console.log(result/DECIMAL);
+			var balance = result/DECIMAL;
+			mywonbalance = balance;
+			var msg = balance.toFixed(toFixedPrecisis);
+			setWonZGT(msg);
+		} else {
+			console.log(error);
+		}
+    });
+
+	zolax_contract.getDepositBalance(address, function (error, result) {
+		console.log("error->"+error);
+		if (error == null) {
+			console.log("result="+result);
+			console.log(result/DECIMAL);
+			var balance = result/DECIMAL;
+			myDepositZGT = balance;
+			var msg = balance.toFixed(toFixedPrecisis);
+			setDepositZGTBalance(msg);
+		} else {
+			console.log(error);
+		}
+    });
+
+}
+
+
+	function search() {
+
+	}
+	 function calculate1() {
+	var zstamount =$("#zstamount").val();
+	
+	if (zstamount>0) {
+
+	var x = parseFloat(zstamount) /1000;
+	
+	$("#ethcost").val(x);
+	$("#zgtbonus").val(zstamount*0.2);
+	}else{
+	$("#ethcost").val("0");
+	$("#zgtbonus").val("0");
+	}
+}
+
+function calculate2() {
+	var ethamount =$("#ethcost").val();
+	
+	if (ethamount>0){
+	var x = parseFloat(ethamount) * 1000;
+	$("#zstamount").val(x);
+	$("#zgtbonus").val(x*0.2);
+	}else{
+	$("#zstamount").val("0");
+	$("#zgtbonus").val("0");
+	}
+}
+
+function calculate3() {
+	var zgtsaleamount =$("#zgtsaleamount").val();
+	
+	if (zgtsaleamount>0){
+	var x = parseFloat(zgtsaleamount) / 1000;
+	$("#ethgotamount").val(x);
+	}else{
+	$("#ethgotamount").val("0");
+	}
+}
+
+function detectNetworkAndBuy() {
+web3.version.getNetwork((err, netId) => {
+	if (netId != "4") {
+		alert("Please switch to Rinkeby network.");
+	} else {
+		getAccountAndBuy();
+	}
+	
+});
+}
+
+function detectNetworkAndSale() {
+	
+	var saleamount =$("#zgtsaleamount").val();
+	var ethgot =$("#ethgotamount").val();
+	if (saleamount <=0 || ethgot <= 0) {
+		alert("Please input correct value.");
+		return;
+	}
+	if (parseFloat(saleamount) > myZGTBalance) {
+		alert("No enough ZGT to sale.");
+		return;
+	}
+
+	web3.version.getNetwork((err, netId) => {
+		if (netId != "4") {
+			alert("Please switch to Rinkeby network.");
+		} else {
+			getAccountAndSale(parseFloat(saleamount));
+		}
+	});
+}
+
+
+function getAccountAndSale(amount) {
+	web3.eth.getAccounts(function(error, result) {
+    if(error != null) {
+        console.log("Couldn't get accounts");
+		alert("WOW, some unknown errors happens.");
+	} else {
+		curaddress = result[0];
+		web3.eth.defaultAccount = curaddress;
+		if (curaddress != 'undefined') {
+			var strAddress = new String(curaddress);
+			if ((strAddress.indexOf("0x") >=0 || strAddress.indexOf("0X") >=0) &&(strAddress.length>20)) {
+				console.log("My address:"+strAddress);
+				salezgt(amount);
+			} else {
+				alert("Did you unlock your account?");
+			}
+		} else {
+			alert("Did you unlock your account?");
+		}
+	}
+   });
+}
+
+
+
+function salezgt(amount){
+//function transferAndCall(address _spender, uint256 token2Transfer, string str1, string str2, uint256 data1, uint256 data2)
+	zgtToken.transferAndCall(zolaxaddress_rinkeby, amount, "", "", 0, 2, function (error, result) {
+		console.log("transferAndCall->"+result);
+		if (error == null) {
+			console.log("result="+result);
+		} else {
+			console.log(error);
+		}
+	});
+}
+
+
+
+function getAccountAndBuy() {
+	web3.eth.getAccounts(function(error, result) {
+    if(error != null) {
+        console.log("Couldn't get accounts");
+		alert("WOW, some unknown errors happens.");
+	} else {
+		curaddress = result[0];
+		web3.eth.defaultAccount = curaddress;
+		if (curaddress != 'undefined') {
+			var strAddress = new String(curaddress);
+			if ((strAddress.indexOf("0x") >=0 || strAddress.indexOf("0X") >=0) &&(strAddress.length>20)) {
+				console.log("My address:"+strAddress);
+				buyzgt(curaddress);
+			} else {
+				alert("Did you unlock your account?");
+			}
+		} else {
+			alert("Did you unlock your account?");
+		}
+	}
+   });
+}
+
+
+function buyzgt(sender){
+/*
+	var msg = "I confirm that I am NOT a U.S. Canada,China citizen, resident or entity (each a \"U.S., Canada or China Person\") nor am I purchasing ZST Tokens or signing on behalf of a  U.S. Canada,China Person.";
+	
+	if (!confirm(msg)){
+		return;
+	}
+*/
+	var ethamount =$("#ethcost").val();
+	var zstamount =$("#zstamount").val();
+	
+	if (ethamount <=0 || zstamount<=0) {
+		alert("Please input valid data.");
+		return;
+	}
+	
+	var receiver = zolaxaddress_rinkeby;
+	var amount = web3.toWei(parseFloat(ethamount), "ether");
+	web3.eth.sendTransaction({from: sender, to:receiver, value: amount, gasLimit: 21000, gasPrice: 2000000000}, function(error){});
+}
+	</script>
+	</head>
+<body  style=" background-repeat:no-repeat ;background-size:100% 100%; background-attachment:fixed;">
+	<!-- <div id="particles-js"><canvas class="particles-js-canvas-el" style="width: 100%; height: 100%;" width="1093" height="925"></canvas></div> -->
+	<div class="bg-primary py-4" >
+		<div class="container">
+			<div class="row">
+				<div class="col-4">
+					<div class="row">
+                            <div class="col-1 align-self-center"><a href="http://www.zola.fun/"><img src="wp-content/themes/amchart/images/logos/logo.png" id="logoimg"></a></div>
+                            <div class="col-1 thin align-self-center" id="logo">
+
+                            </div>
+                        </div>
+				</div>
+				<div class="col-8 text-right thin align-self-left" id="balances"><b>Your address:</b><br>ETH Balance:<br>ZST Balance:<br>ZGT Balance:<br>ZGT Won:<br>ZGT Dividend:</div>
+			</div>
+		</div>
+	</div>
+	<div id="mainmenu">
+	<nav class="navbar navbar-expand-md navbar-light bg-secondary p-0">
+		<div class="container" >
+			<button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span></button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="nav navbar-nav mr-auto">
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="index.html">Home</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="staytoend.html">Stay To Last</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="zstsale.html">Buy ZST</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="buysalezgt.html">Buy/Sale ZGT</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</nav>
+	</div>
+<br><br><p align="center" style='color:black'>ZGT is the token you need to use to play game on our platform, anytime you can exchange between ZGT and ETH under a fixed rate (1 ETH=1000 ZGT).</p><br>
+	<p align="center" style='color:black'><b>Buy ZGT : Input info in following box and click "Buy"</b></p>
+					<br>
+					<div align="center" style='color:black'>
+
+ZGT to buy <input type="text" id="zstamount" value="1000" onkeyup="javascript:calculate1();"   style ="display：block;width: 100px;margin:0 auto;">   </input>ETH cost <input type="text" id="ethcost" value="1.0" onkeyup="javascript:calculate2();"  style ="display：block;width: 100px;margin:0 auto;"> </input><br><br>
+<br>
+<input type="submit" value="Buy" onclick="javascript:detectNetworkAndBuy();" >
+</div>
+	
+	<br><br><br>
+	<p align="center" style='color:black'><b>Sale ZGT : Input info in following box and click "Sale"</b></p>
+					<br>
+					<div align="center" style='color:black'>
+
+ZGT to sale <input type="text" id="zgtsaleamount" value="1000" onkeyup="javascript:calculate3();"   style ="display：block;width: 100px;margin:0 auto;">   </input><b id="availablezgt">(Available : 12.34 ZGT)</b>&nbsp;&nbsp;&nbsp;&nbsp;ETH get <input type="text" id="ethgotamount" value="1.0"   style ="display：block;width: 100px;margin:0 auto;" disabled="disabled"> </input><br><br>
+<br>
+<input type="submit" value="Sale" onclick="javascript:detectNetworkAndSale();" >
+</div>
+	
+</body>
+
+<br><br>
+<nav class="navbar navbar-expand-md navbar-light bg-secondary p-0">
+		<div class="container" >
+			<button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span></button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="nav navbar-nav mr-auto">
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="">Follow us : </a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="https://twitter.com/Zola_fun">TWitter</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="https://twitter.com/Zola_fun">Facebook</a>
+					</li>
+					<li class="nav-item px-5">
+						<a class="nav-link text-dark text-center" href="https://bitcointalk.org/index.php?topic=2889161.0">BitCoin Talk</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</nav>
+	
+
+<br><br>
+<br><br>
+
+<br><br>
+<br><br>
+</html>

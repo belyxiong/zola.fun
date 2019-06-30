@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="gb2312">
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+  <script type="text/javascript" src="./web3.min.js"></script>
+  <script type="text/javascript" src="./game3_abi.js"></script>
+  <script type="text/javascript" src="./zgt_abi.js"></script>
+ 
+  <script>
+  var Web3 = require('web3');
+var web3 ;//= new Web3();
+
+var AREA_US = 1;
+var AREA_CHN = 2;
+//game
+var gameContract;
+var contractAddress_game3_US = "0xcf187D8092BFdE329Ec1cDDead6CF2c25f897cdF";
+var contractABI_game3_US = zola_game_type3_abi;
+
+var curaddress;
+var isAdmin = false;
+
+  
+  window.addEventListener('load', function() {
+
+
+	init();
+
+});
+
+function init() {
+  if (typeof web3 !== 'undefined') {
+    console.log('Web3 found');
+    web3 = new Web3(web3.currentProvider);
+	detectNetwork();
+  } else {
+     console.error('web3 was undefined');
+	 alert("Please install metamask and unlock account.");
+	 self.opener=null;
+	self.close();
+  }
+}
+
+function detectNetwork() {
+web3.version.getNetwork((err, netId) => {
+	if (netId != "4") {
+		alert("Pleas switch to Rinkeby test network.");
+	} else {
+		getCurrentAccount();
+	}
+	/*
+  switch (netId) {
+    case "1":
+      console.log('This is mainnet')
+      break
+    case "2":
+      console.log('This is the deprecated Morden test network.')
+      break
+    case "3":
+      console.log('This is the ropsten test network.')
+      break
+    case "4":
+      console.log('This is the Rinkeby test network.')
+      break
+    case "42":
+      console.log('This is the Kovan test network.')
+      break
+    default:
+      console.log('This is an unknown network.')
+  }
+  */
+});
+}
+
+function getCurrentAccount() {
+	web3.eth.getAccounts(function(error, result) {
+    if(error != null) {
+        console.log("Couldn't get accounts");
+		alert("WOW, some unknown errors happens.");
+	} else {
+		curaddress = result[0];
+		web3.eth.defaultAccount = curaddress;
+		if (curaddress != 'undefined') {
+			var strAddress = new String(curaddress);
+			if ((strAddress.indexOf("0x") >=0 || strAddress.indexOf("0X") >=0) &&(strAddress.length>20)) {
+				checkIfAdmin(curaddress);
+			} else {
+				alert("Please unlock account.");
+			}
+		} else {
+			alert("Did you unlock your account?");
+			window.opener=null;window.close();
+		}
+	}
+   });
+}
+
+function checkIfAdmin(address) {
+
+	var adminContract = web3.eth.contract(contractABI_game3_US).at(contractAddress_game3_US);
+	adminContract.checkAdmin.call(address, function (error, result) {
+		console.log("checkIfAdmin.error->"+error);
+		if (error == null) {
+			console.log("checkIfAdmin.result="+result);
+			isAdmin = true;
+		} else {
+			console.log(error);
+			isAdmin = false;
+			window.opener=null;window.close();
+		}
+    });
+}
+  
+  
+  
+  
+  function drawLuckyNumber(type, area) {
+	if (!isAdmin) {
+		alert("账户没有权限！");
+		return;
+	}
+	var msg = "确定开奖";
+	if (area == AREA_US) {
+		msg = "美国区";
+	} else if (area == AREA_CHN){
+		msg = "中国区";
+	} else {
+		return;
+	}
+	if (type == 3) {
+		msg += "3 型?";
+	} else if (type == 4) {
+		msg += "4 型?";
+	} else if (type == 6) {
+		msg += "6 型?";
+	} else {
+		return;
+	}
+	
+	if (confirm(msg)) {
+		if (!confirm("再次确认："+msg)) {
+			return;
+		} else {
+			var str=prompt("请输入开奖号码：");
+			if (strlen(str) != type) {
+				alert("号码长度不符！");
+				return;
+			} else {
+				var reg = "^[0-9]*[1-9][0-9]*$";
+				if (!str.test(reg)) {
+					alert("必须为全数字！");
+					return;
+				} else {
+					drawLuckyInternal(type, area, str);
+				}
+			}
+		}
+	}
+  }
+  
+  function drawLuckyInternal(type, area, number) {
+	var gameContract = null;
+	switch(type) {
+		case 3:
+			if (area == AREA_US) {
+				gameContract = web3.eth.contract(contractABI_game3_US).at(contractAddress_game3_US);
+			} else if (area == AREA_CHN) {
+			}
+		break;
+		case 4:
+		break;
+		case 6:
+		break;
+	}
+	if (gameContract != null) {
+		gameContract.drawLucky.call(number, function (error, result) {
+		console.log("drawLuckyInternal.error->"+error);
+		if (error == null) {
+			console.log("drawLuckyInternal.result="+result);
+			alert("执行成功!");
+		} else {
+			console.log(error);
+		}
+    });
+	} else {
+		alert("无可用合约");
+	}
+  }
+  
+  function setNextDrawTime() {
+	/*
+	if (!isAdmin) {
+		alert("账户没有权限！");
+		return;
+	}*/
+	var time = prompt("输入时间，保持格式。", "Apr 16, 2018");
+	if (time != null && time != "") {
+		$.post("./php/date.php", { method: "setdate", address: "0x0", date:time});
+	}
+  }
+  </script>
+</head>
+<body>
+<br>
+<br>
+<h2 align="center">管理员</h2>
+
+<table width="50%" align="center" border="1">
+<tr>
+<td width="40%"><h3 align="center">添加管理员</h3></td><td width="40%"><h3 align="center">删除管理员</h3></td><td width="30%"><h3 align="center"><a href="javascript:setNextDrawTime();">下期开奖时间设置</a></h3></td>
+</tr>
+</table>
+<br>
+<br>
+<h2 align="center">管理</h2>
+
+<table width="50%" align="center" border="1">
+<tr>
+<td width="50%"><h3 align="center">美国区</h3></td><td width="50%"><h3 align="center">中国区</h3></td>
+</tr>
+<tr>
+<td colspan="2">&nbsp;</td>
+</tr>
+<tr>
+<td width="50%"><h4 align="center">Game 3</h4></td><td width="50%"><h4 align="center">Game 3</h4></td>
+</tr>
+<tr>
+<td width="50%"><p align="center"><a href="javascript:drawLuckyNumber(3, 1)">开奖</a></p></td><td width="50%"><p align="center">开奖</p></td>
+</tr>
+<tr>
+<td width="50%"><p align="center"><a href="javascript:stopGame(3, 1)">停止游戏</a></p></td><td width="50%"><p align="center">停止游戏</p></td>
+</tr>
+<tr>
+<td width="50%"><p align="center"><a href="javascript:startGame(3, 1)">开始游戏</a></p></td><td width="50%"><p align="center">开始游戏</p></td>
+</tr>
+<tr>
+<td colspan="2">&nbsp;</td>
+</tr>
+<tr>
+<td width="50%"><h4 align="center">Game 4</h4></td><td width="50%"><h4 align="center">Game 4</h4></td>
+</tr>
+
+<tr>
+<td width="50%"><p align="center">开奖</p></td><td width="50%"><p align="center">开奖</p></td>
+</tr>
+<tr>
+<td width="50%"><p align="center">停止游戏</p></td><td width="50%"><p align="center">停止游戏</p></td>
+</tr>
+<tr>
+<td width="50%"><p align="center">开始游戏</p></td><td width="50%"><p align="center">开始游戏</p></td>
+</tr>
+<tr>
+<td colspan="2">&nbsp;</td>
+</tr>
+<tr>
+<td width="50%"><h4 align="center">Game 6</h4></td><td width="50%"><h4 align="center">Game 6</h4></td>
+</tr>
+<tr>
+<td width="50%"><p align="center">开奖</p></td><td width="50%"><p align="center">开奖</p></td>
+</tr>
+<tr>
+<td width="50%"><p align="center">停止游戏</p></td><td width="50%"><p align="center">停止游戏</p></td>
+</tr>
+<tr>
+<td width="50%"><p align="center">开始游戏</p></td><td width="50%"><p align="center">开始游戏</p></td>
+</tr>
+</table>
+<br>
+<br>
+
+</body>
+</html>
