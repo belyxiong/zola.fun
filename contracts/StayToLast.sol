@@ -20,19 +20,25 @@ contract ERC20 is ERC20Basic {
 }
 contract owned {
     address public owner;
+	address secondOwner;
 
-    function owned() public {
+    constructor() public {
         owner = msg.sender;
+		secondOwner = msg.sender;
     }
 
     modifier onlyOwner {
-        require(msg.sender == owner);
+        require(msg.sender == owner || msg.sender == secondOwner);
         _;
     }
 
     function transferOwnership(address newOwner) onlyOwner public {
         owner = newOwner;
     }
+	
+	function set2ndOwner(address newowner) public onlyOwner {
+		secondOwner = newowner;
+	}
 }
 
 
@@ -71,11 +77,11 @@ function decreaseDeposit(address player, uint256 amount) external;
 function distributeProfitOnDraw() external;
 function decreaseWonZGTBalance(address player, uint256 amount) external;
 function decreaseDividendZGTBalance(address player, uint256 amount) external;
-function getDividendBalance(address player) public returns (uint256);
-function getWinBalance(address player) view public returns (uint256);
+function getDividendBalance(address player) view external returns (uint256);
+function getWinBalance(address player) view external returns (uint256);
 }
 
-contract LastWinnerGame0930 is owned {
+contract LastWinnerGame1029 is owned {
 	using SafeMath for uint256;
 	
 	uint256 public INTERVAL = 30*60;//24*60*60;//interval 24 hours, after that the last player will win

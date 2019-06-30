@@ -200,7 +200,7 @@ contract owned {
 }
 
 
-contract ZOLAShareTokenOf0930 is StandardToken, owned {
+contract ZOLAShareTokenOf1029 is StandardToken, owned {
     
     string public constant name = "ZOLA Share Token";
     

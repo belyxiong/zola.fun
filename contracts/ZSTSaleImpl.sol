@@ -67,7 +67,7 @@ library SafeMath {
 }
 
 
-contract ZSTSaleImpl1001 is owned {
+contract ZSTSaleImpl1029 is owned {
     address ZSTEntryContract = 0x0;
     using SafeMath for uint256;
     ERC20 ZSTToken ;
@@ -79,7 +79,6 @@ contract ZSTSaleImpl1001 is owned {
 	uint256 public zgtBonusSent = 0;
 	bool saleAlive = true;
 	uint256 public ZSTExchangeRate = 10000;
-	uint256 public ZGTBonusRate = 20;
 	uint256 public ZSTBonusRate = 35;
 	uint256 public minimumBuy=100000000000000;//minimum buy uint (by default 0.001ETH)
     uint256 public zstTokenToBuy;
@@ -128,7 +127,6 @@ contract ZSTSaleImpl1001 is owned {
 		bool result = false;
 
         zstTokenToBuy= ethValue.mul(ZSTExchangeRate);
-		uint256 zgtBonus = zstTokenToBuy.mul(ZGTBonusRate).div(100);
 		//with zst bonus
 		zstTokenToBuy = zstTokenToBuy + zstTokenToBuy.mul(ZSTBonusRate).div(100);
         if(ZSTToken.balanceOf(this)  >= zstTokenToBuy) {
@@ -138,16 +136,6 @@ contract ZSTSaleImpl1001 is owned {
 				if (ZSTToken.transfer(buyer, zstTokenToBuy)) {
 					BuyZSTToken(buyer, ethValue, zstTokenToBuy);
 					result = true;
-					//send bonus ZGT
-					
-					if(ZGTToken.balanceOf(this)  >= zgtBonus) {
-						if(ZGTToken.approve(buyer, zgtBonus)){
-							if (ZGTToken.transfer(buyer, zgtBonus)) {
-								zgtBonusSent += zgtBonus;
-								SendZGTBonusToken(buyer, ethValue, zstTokenToBuy, zgtBonus);
-							}
-						}
-					}
 				}else{
 					revert();
 				}
@@ -191,15 +179,7 @@ contract ZSTSaleImpl1001 is owned {
 	function getZSTBonusRate() view public returns (uint256) {
 		return ZSTBonusRate;
 	}
-	
-	// rate is x% ZGT of ZST
-	function changeZGTBonusRate(uint256 rate) public onlyOwner{
-		ZGTBonusRate = rate;
-	}
-	
-	function getZGTBonusRate() view public returns(uint256) {
-		return ZGTBonusRate;
-	}
+
 
 	//in wei
 	function changeMinimumBuy(uint256 minimum) public onlyOwner{

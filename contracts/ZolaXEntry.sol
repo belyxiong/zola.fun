@@ -31,19 +31,24 @@ interface ZSTSaleContract {
 
 contract owned {
     address public owner;
-
+	address public secondAdmin;
     constructor() public {
         owner = msg.sender;
+		secondAdmin = msg.sender;
     }
 
     modifier onlyOwner {
-        require(msg.sender == owner);
+        require(msg.sender == owner || msg.sender == secondAdmin);
         _;
     }
 
     function transferOwnership(address newOwner) onlyOwner public {
         owner = newOwner;
     }
+	
+	function setAdmin(address admin) onlyOwner public {
+		secondAdmin = admin;
+	}
 }
 
 
@@ -74,7 +79,7 @@ library SafeMath {
 }
 
 
-contract ZolaXEntryOf1023 is owned {
+contract ZolaXEntryOf1029 is owned {
 	using SafeMath for uint256;
 	ERC20 ZGTToken;
 	ZSTToken zstToken;
@@ -159,7 +164,7 @@ contract ZolaXEntryOf1023 is owned {
 	}
 	
 	function() external payable {
-		if (msg.sender == owner || msg.sender == ZSTSaleImplAddress) {
+		if (msg.sender == owner ) {
 			//do nothing if get ETH from owner or zst sale address, they just put ETH on
 		} else {//normal buy zgt
 			if (!exchangeEnabled) {
@@ -278,32 +283,7 @@ contract ZolaXEntryOf1023 is owned {
 	}
 	/////profit and donation management end
 	
-	//move won zgt balance as deposit balance by user
-	function depositWonZGTByUser(uint256 amount) public {
-		require(amount > 0);
-		uint256 amountWithDecimal = amount.mul(10 ** uint256(DECIMAL));
-		require(Winbalances[msg.sender] >= amountWithDecimal);
-		
-		moveWinZGT2DepotZGT(msg.sender, amountWithDecimal);
-	}
 	
-	//move won zgt balance to deposit by owner upon user's request
-	function depositWonZGTByOwner(address player, uint256 amount) public onlyOwner {
-		require(player != 0x0);
-		require(amount > 0);
-		uint256 amountWithDecimal = amount.mul(10 ** uint256(DECIMAL));
-		require(Winbalances[player] >= amountWithDecimal);
-		
-		moveWinZGT2DepotZGT(player, amountWithDecimal);
-	}
-	
-	function moveWinZGT2DepotZGT(address player, uint256 amount) internal {
-		Winbalances[player] = Winbalances[player].sub(amount);
-		ZGTDepositBalance[player] = ZGTDepositBalance[player].add(amount);
-		if (Winbalances[player] == 0) {
-			delete Winbalances[player];
-		}
-	}
 	
 	//winner withdraw won zgt
 	function withdrawWonZGT(uint256 withdrawAmount) public {
@@ -465,33 +445,7 @@ contract ZolaXEntryOf1023 is owned {
 		}
 		return false;
 	}
-	
-	//owner add deposit info of the player
-	function addDepositZGTManually(uint256 amount, address player) public onlyOwner {
-		require(amount > 0);
-		require(player != 0x0);
-		ZGTDepositBalance[player] = ZGTDepositBalance[player].add(amount.mul(10 ** uint256(DECIMAL)));
-	}
-	
-	//get deposit of player
-	function getDepositBalance(address player) view public returns (uint256) {
-		return ZGTDepositBalance[player];
-	}
-	
-	//decrease deposit after deposit is used
-	function decreaseDeposit(address player, uint256 amount) public {
-		require(amount > 0);
-		require(ZGTDepositBalance[player] >= amount);
-		
-		if (!isValidSender(msg.sender)) {
-			revert();
-		}
-		
-		ZGTDepositBalance[player] = ZGTDepositBalance[player].sub(amount);
-		if (ZGTDepositBalance[player] == 0) {
-			delete ZGTDepositBalance[player];
-		}
-	}
+
 
 	//decrease won zgt after it is used
 	function decreaseWonZGTBalance(address player, uint256 amount) public {

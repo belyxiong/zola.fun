@@ -145,7 +145,7 @@ contract owned {
 }
 
 
-contract ZOLAGameTokenOf1001 is StandardToken, owned {
+contract ZOLAGameTokenOf1029 is StandardToken, owned {
     
     string public constant name = "ZOLA Game Token";
     
